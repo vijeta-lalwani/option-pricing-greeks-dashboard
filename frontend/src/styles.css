@@ -1,0 +1,256 @@
+:root {
+  font-family: "Avenir Next", "Segoe UI", sans-serif;
+  color: #10243f;
+  background: linear-gradient(180deg, #f3f7fb 0%, #ffffff 100%);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+}
+
+button,
+input {
+  font: inherit;
+}
+
+.page-shell {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 48px 20px 64px;
+}
+
+.hero {
+  margin-bottom: 32px;
+}
+
+.eyebrow {
+  margin: 0 0 12px;
+  color: #2354a5;
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.hero h1 {
+  margin: 0 0 14px;
+  max-width: 760px;
+  font-size: clamp(2rem, 4vw, 3.4rem);
+  line-height: 1.05;
+}
+
+.hero-copy {
+  max-width: 720px;
+  margin: 0;
+  color: #4a5a72;
+  font-size: 1.05rem;
+  line-height: 1.6;
+}
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 24px;
+}
+
+.lower-grid {
+  margin-top: 24px;
+}
+
+.panel {
+  padding: 24px;
+  border: 1px solid #d8e2f0;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 18px 45px rgba(31, 67, 122, 0.08);
+}
+
+.panel h2 {
+  margin: 0 0 18px;
+  font-size: 1.2rem;
+}
+
+.chart-panel {
+  margin-top: 24px;
+}
+
+.form-grid {
+  display: grid;
+  gap: 16px;
+}
+
+.input-field {
+  display: grid;
+  gap: 8px;
+}
+
+.input-field span {
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.input-field input {
+  padding: 12px 14px;
+  border: 1px solid #bcc9db;
+  border-radius: 12px;
+  background: #fbfcfe;
+}
+
+.submit-button {
+  margin-top: 8px;
+  padding: 14px 18px;
+  border: none;
+  border-radius: 14px;
+  background: #2354a5;
+  color: white;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.submit-button:disabled {
+  opacity: 0.7;
+  cursor: wait;
+}
+
+.metrics-grid {
+  display: grid;
+  gap: 14px;
+}
+
+.runtime-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.metric-card {
+  padding: 18px;
+  border-radius: 16px;
+  border: 1px solid #dbe6f3;
+}
+
+.metric-card-blue {
+  background: #f4f8fd;
+}
+
+.metric-card-gold {
+  background: #fff8e8;
+  border-color: #eed79f;
+}
+
+.metric-label {
+  margin: 0 0 8px;
+  color: #56708f;
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.metric-value {
+  margin: 0;
+  font-size: 1.8rem;
+  font-weight: 700;
+}
+
+.empty-state {
+  margin: 0;
+  color: #5c6d83;
+  line-height: 1.6;
+}
+
+.error-message {
+  margin: 0 0 14px;
+  color: #b42318;
+  font-weight: 600;
+}
+
+.chart-copy {
+  margin: 0 0 18px;
+  color: #5c6d83;
+  line-height: 1.6;
+}
+
+.chart-shell {
+  display: grid;
+  gap: 12px;
+}
+
+.chart-svg {
+  width: 100%;
+  height: auto;
+  border-radius: 16px;
+  background: linear-gradient(180deg, #fbfdff 0%, #f1f6fb 100%);
+  border: 1px solid #dbe6f3;
+}
+
+.axis-line {
+  stroke: #9db0c9;
+  stroke-width: 1.5;
+}
+
+.axis-label {
+  fill: #56708f;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.line-exact {
+  fill: none;
+  stroke: #2354a5;
+  stroke-width: 3;
+}
+
+.line-predicted {
+  fill: none;
+  stroke: #d99700;
+  stroke-width: 3;
+  stroke-dasharray: 8 6;
+}
+
+.chart-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #44576f;
+  font-size: 0.95rem;
+}
+
+.legend-swatch {
+  width: 14px;
+  height: 14px;
+  border-radius: 999px;
+}
+
+.legend-swatch-blue {
+  background: #2354a5;
+}
+
+.legend-swatch-gold {
+  background: #d99700;
+}
+
+.runtime-note {
+  align-self: center;
+}
+
+@media (max-width: 820px) {
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .page-shell {
+    padding-top: 32px;
+  }
+
+  .runtime-grid {
+    grid-template-columns: 1fr;
+  }
+}
