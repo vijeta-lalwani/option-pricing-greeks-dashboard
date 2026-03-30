@@ -84,6 +84,42 @@ input {
   gap: 16px;
 }
 
+.scenario-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.scenario-button {
+  padding: 10px 14px;
+  border: 1px solid #ccd8e8;
+  border-radius: 999px;
+  background: #f7fafe;
+  color: #1f3e67;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.scenario-button-active {
+  border-color: #2354a5;
+  background: #2354a5;
+  color: white;
+  box-shadow: 0 10px 22px rgba(35, 84, 165, 0.22);
+}
+
+.scenario-copy {
+  margin: 0 0 8px;
+  color: #5c6d83;
+  line-height: 1.5;
+}
+
+.scenario-selected {
+  margin: 0 0 18px;
+  color: #36537a;
+  font-size: 0.95rem;
+}
+
 .input-field {
   display: grid;
   gap: 8px;
@@ -102,7 +138,6 @@ input {
 }
 
 .submit-button {
-  margin-top: 8px;
   padding: 14px 18px;
   border: none;
   border-radius: 14px;
@@ -115,6 +150,23 @@ input {
 .submit-button:disabled {
   opacity: 0.7;
   cursor: wait;
+}
+
+.button-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.secondary-button {
+  padding: 14px 18px;
+  border: 1px solid #cbd7e7;
+  border-radius: 14px;
+  background: #f7fafe;
+  color: #1f3e67;
+  font-weight: 700;
+  cursor: pointer;
 }
 
 .metrics-grid {
@@ -166,6 +218,16 @@ input {
   font-weight: 600;
 }
 
+.info-copy {
+  margin: 0 0 18px;
+  color: #5c6d83;
+  line-height: 1.5;
+}
+
+.info-copy p {
+  margin: 0 0 8px;
+}
+
 .chart-copy {
   margin: 0 0 18px;
   color: #5c6d83;
@@ -179,7 +241,7 @@ input {
 
 .chart-svg {
   width: 100%;
-  height: auto;
+  height: 300px;
   border-radius: 16px;
   background: linear-gradient(180deg, #fbfdff 0%, #f1f6fb 100%);
   border: 1px solid #dbe6f3;

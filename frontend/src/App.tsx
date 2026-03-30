@@ -19,8 +19,42 @@ const initialInput: OptionInput = {
   volatility: 0.2
 };
 
+const exampleScenarios: Array<{ label: string; values: OptionInput }> = [
+  {
+    label: "At-the-Money",
+    values: {
+      stock_price: 100,
+      strike_price: 100,
+      time_to_maturity: 1,
+      rate: 0.05,
+      volatility: 0.2
+    }
+  },
+  {
+    label: "In-the-Money",
+    values: {
+      stock_price: 130,
+      strike_price: 100,
+      time_to_maturity: 0.75,
+      rate: 0.04,
+      volatility: 0.25
+    }
+  },
+  {
+    label: "High Volatility",
+    values: {
+      stock_price: 100,
+      strike_price: 105,
+      time_to_maturity: 1.5,
+      rate: 0.03,
+      volatility: 0.5
+    }
+  }
+];
+
 export default function App() {
   const [formValues, setFormValues] = useState<OptionInput>(initialInput);
+  const [selectedScenario, setSelectedScenario] = useState("At-the-Money");
   const [analysis, setAnalysis] = useState<AnalyzeResponse | null>(null);
   const [sensitivity, setSensitivity] = useState<SensitivityResponse | null>(null);
   const [runtimeMetrics, setRuntimeMetrics] = useState<RuntimeMetrics | null>(null);
@@ -32,6 +66,23 @@ export default function App() {
       ...currentValues,
       [name]: value
     }));
+  }
+
+  function handleScenarioSelect(values: OptionInput) {
+    setFormValues(values);
+    const match = exampleScenarios.find(
+      (scenario) => JSON.stringify(scenario.values) === JSON.stringify(values)
+    );
+    setSelectedScenario(match ? match.label : "");
+  }
+
+  function handleReset() {
+    setFormValues(initialInput);
+    setSelectedScenario("At-the-Money");
+    setAnalysis(null);
+    setSensitivity(null);
+    setRuntimeMetrics(null);
+    setErrorMessage("");
   }
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
@@ -69,6 +120,28 @@ export default function App() {
       <div className="dashboard-grid">
         <section className="panel">
           <h2>Option Inputs</h2>
+          <div className="scenario-row">
+            {exampleScenarios.map((scenario) => (
+              <button
+                key={scenario.label}
+                type="button"
+                className={
+                  scenario.label === selectedScenario
+                    ? "scenario-button scenario-button-active"
+                    : "scenario-button"
+                }
+                onClick={() => handleScenarioSelect(scenario.values)}
+              >
+                {scenario.label}
+              </button>
+            ))}
+          </div>
+          <p className="scenario-copy">
+            Pick a preset scenario to explore common option setups, or adjust the values manually.
+          </p>
+          <p className="scenario-selected">
+            Active preset: <strong>{selectedScenario || "Custom input"}</strong>
+          </p>
           <form onSubmit={handleSubmit} className="form-grid">
             <InputField
               label="Stock Price (S)"
@@ -101,14 +174,28 @@ export default function App() {
               onChange={handleInputChange}
             />
 
-            <button type="submit" className="submit-button" disabled={loading}>
-              {loading ? "Calculating..." : "Calculate Metrics"}
-            </button>
+            <div className="button-row">
+              <button type="submit" className="submit-button" disabled={loading}>
+                {loading ? "Calculating..." : "Calculate Metrics"}
+              </button>
+              <button type="button" className="secondary-button" onClick={handleReset}>
+                Reset
+              </button>
+            </div>
           </form>
         </section>
 
         <section className="panel">
           <h2>Exact Black-Scholes Outputs</h2>
+          <div className="info-copy">
+            <p>
+              <strong>Delta</strong> shows how much the option price changes when the stock price
+              moves by 1 unit.
+            </p>
+            <p>
+              <strong>Vega</strong> shows how much the option price changes when volatility changes.
+            </p>
+          </div>
           {errorMessage ? <p className="error-message">{errorMessage}</p> : null}
 
           {analysis ? (
@@ -169,6 +256,7 @@ export default function App() {
             <SensitivityChart
               points={sensitivity.points}
               showPredicted={sensitivity.model_loaded}
+              metric="price"
             />
           </>
         ) : (
@@ -182,9 +270,12 @@ export default function App() {
         <h2>Runtime Comparison</h2>
         {runtimeMetrics ? (
           <>
-            <p className="chart-copy">
+          <p className="chart-copy">
               This compares the time needed to compute the exact Black-Scholes metrics
-              against the neural surrogate inference for the same input.
+              against the neural surrogate inference for the same input. For a closed-form
+              formula like Black-Scholes, the analytical method is expected to be faster.
+              The surrogate setup is more useful as a stepping stone toward heavier pricing
+              engines where approximation can matter more.
             </p>
             <div className="metrics-grid runtime-grid">
               <MetricCard label="Exact Runtime (ms)" value={runtimeMetrics.exact_runtime_ms} />
@@ -207,6 +298,50 @@ export default function App() {
           </p>
         )}
       </section>
+
+      <div className="dashboard-grid lower-grid">
+        <section className="panel">
+          <h2>Delta Sensitivity Chart</h2>
+          {sensitivity ? (
+            <>
+              <p className="chart-copy">
+                This view shows how delta changes as the stock price moves, which is useful
+                for understanding the option&apos;s sensitivity to the underlying asset.
+              </p>
+              <SensitivityChart
+                points={sensitivity.points}
+                showPredicted={sensitivity.model_loaded}
+                metric="delta"
+              />
+            </>
+          ) : (
+            <p className="empty-state">
+              Calculate the metrics first to generate the delta sensitivity view.
+            </p>
+          )}
+        </section>
+
+        <section className="panel">
+          <h2>Vega Sensitivity Chart</h2>
+          {sensitivity ? (
+            <>
+              <p className="chart-copy">
+                This chart tracks how vega changes across stock-price scenarios, which helps
+                show how volatility sensitivity behaves under different market conditions.
+              </p>
+              <SensitivityChart
+                points={sensitivity.points}
+                showPredicted={sensitivity.model_loaded}
+                metric="vega"
+              />
+            </>
+          ) : (
+            <p className="empty-state">
+              Calculate the metrics first to generate the vega sensitivity view.
+            </p>
+          )}
+        </section>
+      </div>
     </main>
   );
 }

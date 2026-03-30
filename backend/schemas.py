@@ -35,7 +35,11 @@ class AnalyzeResponse(BaseModel):
 class SensitivityPoint(BaseModel):
     stock_price: float
     exact_price: float
+    exact_delta: float
+    exact_vega: float
     predicted_price: Optional[float] = None
+    predicted_delta: Optional[float] = None
+    predicted_vega: Optional[float] = None
 
 
 class SensitivityResponse(BaseModel):

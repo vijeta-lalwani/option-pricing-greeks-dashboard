@@ -3,6 +3,7 @@ import type { SensitivityPoint } from "../types";
 type SensitivityChartProps = {
   points: SensitivityPoint[];
   showPredicted: boolean;
+  metric: "price" | "delta" | "vega";
 };
 
 type ChartPoint = {
@@ -14,17 +15,25 @@ function toPath(points: ChartPoint[]): string {
   return points.map((point, index) => `${index === 0 ? "M" : "L"} ${point.x} ${point.y}`).join(" ");
 }
 
-export function SensitivityChart({ points, showPredicted }: SensitivityChartProps) {
+const chartLabels = {
+  price: "Call Price",
+  delta: "Delta",
+  vega: "Vega"
+};
+
+export function SensitivityChart({ points, showPredicted, metric }: SensitivityChartProps) {
   const width = 640;
   const height = 280;
   const padding = 36;
 
   const minX = Math.min(...points.map((point) => point.stock_price));
   const maxX = Math.max(...points.map((point) => point.stock_price));
+  const exactKey = `exact_${metric}` as const;
+  const predictedKey = `predicted_${metric}` as const;
   const allYValues = points.flatMap((point) =>
-    showPredicted && point.predicted_price !== null
-      ? [point.exact_price, point.predicted_price]
-      : [point.exact_price]
+    showPredicted && point[predictedKey] !== null
+      ? [point[exactKey], point[predictedKey] as number]
+      : [point[exactKey]]
   );
   const minY = Math.min(...allYValues);
   const maxY = Math.max(...allYValues);
@@ -45,14 +54,14 @@ export function SensitivityChart({ points, showPredicted }: SensitivityChartProp
 
   const exactPoints = points.map((point) => ({
     x: scaleX(point.stock_price),
-    y: scaleY(point.exact_price)
+    y: scaleY(point[exactKey])
   }));
 
   const predictedPoints = points
-    .filter((point) => point.predicted_price !== null)
+    .filter((point) => point[predictedKey] !== null)
     .map((point) => ({
       x: scaleX(point.stock_price),
-      y: scaleY(point.predicted_price as number)
+      y: scaleY(point[predictedKey] as number)
     }));
 
   return (
@@ -76,7 +85,7 @@ export function SensitivityChart({ points, showPredicted }: SensitivityChartProp
           transform={`rotate(-90 18 ${height / 2})`}
           className="axis-label"
         >
-          Call Price
+          {chartLabels[metric]}
         </text>
       </svg>
 

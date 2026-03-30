@@ -10,6 +10,8 @@ The app is being built in stages:
 - a neural network that will approximate the same metrics
 - a stock-price sensitivity chart for exact vs predicted price curves
 - a runtime comparison panel for exact formulas vs surrogate inference
+- delta and vega sensitivity charts for richer risk analysis
+- preset example scenarios for faster exploration and demos
 
 ## Project Structure
 

@@ -28,7 +28,11 @@ export type AnalyzeResponse = {
 export type SensitivityPoint = {
   stock_price: number;
   exact_price: number;
+  exact_delta: number;
+  exact_vega: number;
   predicted_price: number | null;
+  predicted_delta: number | null;
+  predicted_vega: number | null;
 };
 
 export type SensitivityResponse = {

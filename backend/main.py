@@ -164,13 +164,31 @@ def sensitivity_curve(option_input: OptionInput) -> SensitivityResponse:
             scenario_input.rate,
             scenario_input.volatility,
         )
+        exact_delta = call_delta(
+            scenario_input.stock_price,
+            scenario_input.strike_price,
+            scenario_input.time_to_maturity,
+            scenario_input.rate,
+            scenario_input.volatility,
+        )
+        exact_vega = call_vega(
+            scenario_input.stock_price,
+            scenario_input.strike_price,
+            scenario_input.time_to_maturity,
+            scenario_input.rate,
+            scenario_input.volatility,
+        )
         predicted_metrics = predict_metrics(scenario_input)
 
         points.append(
             SensitivityPoint(
                 stock_price=scenario_input.stock_price,
                 exact_price=exact_price,
+                exact_delta=exact_delta,
+                exact_vega=exact_vega,
                 predicted_price=predicted_metrics.price if predicted_metrics else None,
+                predicted_delta=predicted_metrics.delta if predicted_metrics else None,
+                predicted_vega=predicted_metrics.vega if predicted_metrics else None,
             )
         )
 
